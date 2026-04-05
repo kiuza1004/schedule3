@@ -60,6 +60,8 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .calendar-header h2 {
@@ -83,6 +85,22 @@ body {
 
 .nav-btn:hover {
   background: rgba(255, 255, 255, 0.1);
+}
+
+.today-btn {
+  background: var(--primary);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.today-btn:hover {
+  opacity: 0.9;
 }
 
 .calendar-grid {
@@ -267,6 +285,12 @@ button.primary-btn:hover {
 .date-range-row {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
+}
+
+.date-range-row input {
+  flex: 1;
+  min-width: 120px;
 }
 
 .keyword-row {
@@ -321,4 +345,17 @@ button.primary-btn:hover {
   background: rgba(0,0,0,0.6);
   backdrop-filter: blur(4px);
   z-index: 999;
+}
+
+/* Extra small device support */
+@media (max-width: 360px) {
+  .calendar-header h2 {
+    font-size: 1.1rem;
+  }
+  .card {
+    padding: 15px;
+  }
+  .day {
+    font-size: 0.85rem;
+  }
 }

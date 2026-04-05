@@ -28,6 +28,7 @@ const App = () => {
   // Form States
   const [hour, setHour] = useState('09');
   const [minute, setMinute] = useState('00');
+  const [isAlarmEnabled, setIsAlarmEnabled] = useState(false); // Default: Disabled
   const [alertOffset, setAlertOffset] = useState(0); // minutes
   const [memo, setMemo] = useState('');
   const [isDirty, setIsDirty] = useState(false);
@@ -119,6 +120,12 @@ const App = () => {
     setViewDate(nextDate);
   };
 
+  const handleGoToToday = () => {
+    const today = new Date();
+    setViewDate(today);
+    selectDate(formatDate(today));
+  };
+
   const handleDateClick = (day) => {
     if (!day) return;
     const dateStr = formatDate(new Date(currentYear, currentMonth, day));
@@ -140,16 +147,17 @@ const App = () => {
   // --- Actions ---
   const saveSchedule = () => {
     if (!memo.trim()) return;
-    const timeStr = `${hour}:${minute}`;
+    const timeStr = isAlarmEnabled ? `${hour}:${minute}` : null;
     const newSchedule = {
       id: Date.now(),
       date: selectedDate,
       memo,
       time: timeStr,
-      alertOffset
+      alertOffset: isAlarmEnabled ? alertOffset : 0
     };
     setSchedules(prev => [...prev, newSchedule]);
     setMemo(''); // Requirement: clear input
+    setIsAlarmEnabled(false); // Reset to default
     setIsDirty(false);
     alert('저장되었습니다.');
   };
@@ -213,7 +221,10 @@ const App = () => {
       <section className="card">
         <header className="calendar-header">
           <button className="nav-btn" onClick={() => changeMonth(-1)} aria-label="이전 달">&lt;</button>
-          <h2>{currentYear}년 {currentMonth + 1}월</h2>
+          <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+            <h2>{currentYear}년 {currentMonth + 1}월</h2>
+            <button className="today-btn" onClick={handleGoToToday}>당일</button>
+          </div>
           <button className="nav-btn" onClick={() => changeMonth(1)} aria-label="다음 달">&gt;</button>
         </header>
         
@@ -258,42 +269,59 @@ const App = () => {
           />
         </div>
         <div className="input-group">
-          <label>알람 시간</label>
-          <div style={{display: 'flex', gap: '8px'}}>
-            <select 
-              className="glass-select"
-              value={hour}
-              onChange={(e) => { setHour(e.target.value); setIsDirty(true); }}
-            >
-              {Array.from({length: 24}, (_, i) => String(i).padStart(2, '0')).map(h => (
-                <option key={h} value={h}>{h}시</option>
-              ))}
-            </select>
-            <select 
-              className="glass-select"
-              value={minute}
-              onChange={(e) => { setMinute(e.target.value); setIsDirty(true); }}
-            >
-              {Array.from({length: 60}, (_, i) => String(i).padStart(2, '0')).map(m => (
-                <option key={m} value={m}>{m}분</option>
-              ))}
-            </select>
+          <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px'}}>
+            <input 
+              type="checkbox" 
+              id="alarm-toggle"
+              checked={isAlarmEnabled}
+              onChange={(e) => setIsAlarmEnabled(e.target.checked)}
+              style={{width: '20px', height: '20px', cursor: 'pointer'}}
+            />
+            <label htmlFor="alarm-toggle" style={{margin: 0, cursor: 'pointer', fontWeight: 600}}>알람 설정 사용</label>
           </div>
-        </div>
-        <div className="input-group">
-          <label>사전 알림</label>
-          <select 
-            className="glass-select"
-            value={alertOffset}
-            onChange={(e) => setAlertOffset(Number(e.target.value))}
-          >
-            <option value={0}>정시 알림</option>
-            <option value={10}>10분 전</option>
-            <option value={30}>30분 전</option>
-            <option value={60}>1시간 전</option>
-            <option value={120}>2시간 전</option>
-            <option value={1440}>1일 전</option>
-          </select>
+          
+          {isAlarmEnabled && (
+            <div style={{display: 'flex', flexDirection: 'column', gap: '15px', padding: '15px', background: 'rgba(255,255,255,0.03)', borderRadius: '12px'}}>
+              <div className="input-group" style={{margin: 0}}>
+                <label>알람 시간</label>
+                <div style={{display: 'flex', gap: '8px'}}>
+                  <select 
+                    className="glass-select"
+                    value={hour}
+                    onChange={(e) => { setHour(e.target.value); setIsDirty(true); }}
+                  >
+                    {Array.from({length: 24}, (_, i) => String(i).padStart(2, '0')).map(h => (
+                      <option key={h} value={h}>{h}시</option>
+                    ))}
+                  </select>
+                  <select 
+                    className="glass-select"
+                    value={minute}
+                    onChange={(e) => { setMinute(e.target.value); setIsDirty(true); }}
+                  >
+                    {Array.from({length: 60}, (_, i) => String(i).padStart(2, '0')).map(m => (
+                      <option key={m} value={m}>{m}분</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="input-group" style={{margin: 0}}>
+                <label>사전 알림</label>
+                <select 
+                  className="glass-select"
+                  value={alertOffset}
+                  onChange={(e) => setAlertOffset(Number(e.target.value))}
+                >
+                  <option value={0}>정시 알림</option>
+                  <option value={10}>10분 전</option>
+                  <option value={30}>30분 전</option>
+                  <option value={60}>1시간 전</option>
+                  <option value={120}>2시간 전</option>
+                  <option value={1440}>1일 전</option>
+                </select>
+              </div>
+            </div>
+          )}
         </div>
         <button className="primary-btn" onClick={saveSchedule}>일정 저장</button>
 
