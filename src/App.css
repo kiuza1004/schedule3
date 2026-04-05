@@ -184,13 +184,13 @@ input, textarea, .glass-select {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--glass-border);
   border-radius: 12px;
-  padding: 12px 16px;
+  padding: 12px 12px; /* Reduced from 16px to prevent clipping */
   color: white;
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 0.9rem; /* Slightly smaller base font */
   outline: none;
   transition: border-color 0.2s;
-  appearance: none; /* Reset for better styling */
+  appearance: none; 
 }
 
 /* Custom arrow for select if needed, or just keep it simple */
@@ -290,7 +290,9 @@ button.primary-btn:hover {
 
 .date-range-row input {
   flex: 1;
-  min-width: 120px;
+  min-width: 0; /* Allow to shrink below content size */
+  font-size: 0.8rem; /* Target specific clipping area */
+  padding: 10px 8px;
 }
 
 .keyword-row {
@@ -350,12 +352,19 @@ button.primary-btn:hover {
 /* Extra small device support */
 @media (max-width: 360px) {
   .calendar-header h2 {
-    font-size: 1.1rem;
+    font-size: 1.0rem;
   }
   .card {
-    padding: 15px;
+    padding: 12px;
   }
   .day {
+    font-size: 0.8rem;
+  }
+  input, textarea, .glass-select {
     font-size: 0.85rem;
+    padding: 10px 8px;
+  }
+  .date-range-row input {
+    font-size: 0.75rem;
   }
 }

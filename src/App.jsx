@@ -121,9 +121,14 @@ const App = () => {
   };
 
   const handleGoToToday = () => {
-    const today = new Date();
-    setViewDate(today);
-    selectDate(formatDate(today));
+    const todayStr = formatDate(new Date());
+    if (isDirty) {
+      setShowConfirm({ active: true, nextDate: todayStr });
+    } else {
+      const today = new Date();
+      setViewDate(today);
+      selectDate(todayStr);
+    }
   };
 
   const handleDateClick = (day) => {
