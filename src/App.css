@@ -60,8 +60,61 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Already exists, but ensure it's here */
   gap: 10px;
+}
+
+.collapsible-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px 0;
+  user-select: none;
+}
+
+.collapsible-header:hover h3 {
+  color: var(--primary);
+}
+
+.toggle-icon {
+  font-size: 0.7rem;
+  transition: transform 0.3s ease;
+  color: var(--text-muted);
+}
+
+.toggle-icon.open {
+  transform: rotate(90deg);
+  color: var(--primary);
+}
+
+.edit-badge {
+  background: var(--accent-gold);
+  color: #000;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 20px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-fade {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-content {
+  margin-top: 15px;
 }
 
 .calendar-header h2 {
@@ -238,10 +291,22 @@ button.primary-btn:hover {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--glass-border);
   border-radius: 12px;
-  padding: 12px 16px;
+  padding: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.item-card.edit-target {
+  cursor: pointer;
+}
+
+.item-card.edit-target:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateX(4px);
+  border-color: var(--primary);
 }
 
 .item-info {
